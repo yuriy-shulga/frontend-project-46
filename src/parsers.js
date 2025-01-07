@@ -5,10 +5,9 @@ export default (data, extension) => {
     case '.json':
       return JSON.parse(data);
     case '.yaml':
-      return yaml.load(data);
     case '.yml':
       return yaml.load(data);
     default:
-      throw new Error(`${extension.slice(1)} format files are not supported!`);
+      throw new Error(`${extension.slice(1)} file format is not supported!`);
   }
 };
