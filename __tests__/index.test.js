@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
-test('nested', () => {
+test('stylish', () => {
   const json1 = getFixturePath('file1.json');
   const json2 = getFixturePath('file2.json');
   const yaml1 = getFixturePath('file1.yml');
@@ -16,7 +16,7 @@ test('nested', () => {
   const yml1 = getFixturePath('file1.yaml');
   const yml2 = getFixturePath('file2.yaml');
 
-  const expected = fs.readFileSync(getFixturePath('resultNested.txt'), 'utf-8');
+  const expected = fs.readFileSync(getFixturePath('stylish.txt'), 'utf-8');
   expect(gendiff(json1, json2)).toEqual(expected);
   expect(gendiff(yaml1, yaml2)).toEqual(expected);
   expect(gendiff(yml1, yml2)).toEqual(expected);
