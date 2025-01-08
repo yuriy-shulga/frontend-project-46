@@ -18,6 +18,7 @@ describe('formatters', () => {
 
   const stylishDiff = fs.readFileSync(getFixturePath('stylish.txt'), 'utf8');
   const plainDiff = fs.readFileSync(getFixturePath('plain.txt'), 'utf8');
+  const jsonDiff = fs.readFileSync(getFixturePath('json.txt'), 'utf8');
 
   test('stylish', () => {
     expect(gendiff(json1, json2, 'stylish')).toBe(stylishDiff);
@@ -29,6 +30,12 @@ describe('formatters', () => {
     expect(gendiff(json1, json2, 'plain')).toBe(plainDiff);
     expect(gendiff(yml1, yml2, 'plain')).toBe(plainDiff);
     expect(gendiff(yaml1, yaml2, 'plain')).toBe(plainDiff);
+  });
+
+  test('json', () => {
+    expect(gendiff(json1, json2, 'json')).toBe(jsonDiff);
+    expect(gendiff(yml1, yml2, 'json')).toBe(jsonDiff);
+    expect(gendiff(yaml1, yaml2, 'json')).toBe(jsonDiff);
   });
 });
 
