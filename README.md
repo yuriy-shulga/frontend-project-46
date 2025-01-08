@@ -10,7 +10,7 @@ Compares two configuration files and shows a difference
 ## Installation
 
 ```
-git clone https://github.com/Yuriy-Shulga/brain-games.git
+git clone https://github.com/yuriy-shulga/frontend-project-46
 cd gendiff
 npm ci
 npm link
