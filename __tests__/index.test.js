@@ -31,3 +31,23 @@ describe('formatters', () => {
     expect(gendiff(yaml1, yaml2, 'plain')).toBe(plainDiff);
   });
 });
+
+describe('borderline cases', () => {
+  const json1 = getFixturePath('file1.json');
+  const json2 = getFixturePath('file2.json');
+
+  const plainDiff = getFixturePath('plain.txt');
+  const stylishDiff = fs.readFileSync(getFixturePath('stylish.txt'), 'utf8');
+
+  test('default format', () => {
+    expect(gendiff(json1, json2)).toBe(stylishDiff);
+  });
+
+  test('wrong extension', () => {
+    expect(() => gendiff(plainDiff, json2, 'stylish')).toThrow();
+  });
+
+  test('wrong format', () => {
+    expect(() => gendiff(json1, json2, 'style')).toThrow();
+  });
+});
