@@ -23,7 +23,8 @@ export default (tree) => {
       }
 
       if (status === 'modified') {
-        return `Property '${path}' was updated. From ${getNormalizeValue(value[0])} to ${getNormalizeValue(value[1])}`;
+        const [rmValue, addValue] = value;
+        return `Property '${path}' was updated. From ${getNormalizeValue(rmValue)} to ${getNormalizeValue(addValue)}`;
       }
 
       if (status === 'nested') {
