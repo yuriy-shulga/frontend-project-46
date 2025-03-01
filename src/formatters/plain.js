@@ -13,7 +13,7 @@ const getNormalizeValue = (value) => {
 export default (tree) => {
   const diff = tree.flatMap((node) => {
     const iter = (el, path) => {
-      const { status, value } = el;
+      const { status, value, children } = el;
       if (status === 'removed') {
         return `Property '${path}' was removed`;
       }
@@ -23,7 +23,7 @@ export default (tree) => {
       }
 
       if (status === 'modified') {
-        const [rmValue, addValue] = value;
+        const [{ value: rmValue }, { value: addValue }] = children;
         return `Property '${path}' was updated. From ${getNormalizeValue(rmValue)} to ${getNormalizeValue(addValue)}`;
       }
 

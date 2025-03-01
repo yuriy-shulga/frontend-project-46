@@ -31,7 +31,7 @@ const genDiffTree = (obj1, obj2) => {
       return { status: 'unchanged', key, value: value1 };
     }
 
-    return { status: 'modified', key, value: [value1, value2] };
+    return { status: 'modified', key, children: [{ status: 'removed', key, value: value1 }, { status: 'added', key, value: value2 }] };
   });
 
   return diff;
