@@ -1,3 +1,5 @@
+import isObject from '../utilities.js';
+
 const operators = {
   added: '+',
   removed: '-',

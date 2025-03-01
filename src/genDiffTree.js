@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import isObject from './utilits.js';
+import isObject from './utilities.js';
 
 const genDiffTree = (obj1, obj2) => {
   const keys = _.sortBy(Object.keys({ ...obj1, ...obj2 }));
