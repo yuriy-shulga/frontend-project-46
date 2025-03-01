@@ -1,5 +1,4 @@
-import isObject from '../utilits.js';
->>>>>>> 072fe63 (Refactor (formatters): improve tree transformation and formatting logic)
+import isObject from '../utilities.js';
 
 const operators = {
   added: '+',
