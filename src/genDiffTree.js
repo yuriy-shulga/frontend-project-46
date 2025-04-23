@@ -1,37 +1,28 @@
 import _ from 'lodash';
 import isObject from './utilities.js';
 
-const genDiffTree = (obj1, obj2) => {
-  const keys = _.sortBy(Object.keys({ ...obj1, ...obj2 }));
-
-  const genNormalizeValue = (value) => {
-    if (isObject(value)) {
-      return genDiffTree(value, value);
-    }
-
-    return value;
-  };
-
+const genDiffTree = (data1, data2) => {
+  const keys = _.sortBy(Object.keys({ ...data1, ...data2 }));
   const diff = keys.map((key) => {
-    const value1 = genNormalizeValue(obj1[key]);
-    const value2 = genNormalizeValue(obj2[key]);
-    if (!Object.hasOwn(obj1, key)) {
-      return { status: 'added', key, value: value2 };
+    const value1 = data1[key];
+    const value2 = data2[key];
+    if (!Object.hasOwn(data2, key)) {
+      return { key, status: 'removed', value: value1 };
     }
 
-    if (!Object.hasOwn(obj2, key)) {
-      return { status: 'removed', key, value: value1 };
+    if (!Object.hasOwn(data1, key)) {
+      return { key, status: 'added', value: value2 };
     }
 
-    if (isObject(obj1[key]) && isObject(obj2[key])) {
-      return { status: 'nested', key, value: genDiffTree(obj1[key], obj2[key]) };
+    if (_.isEqual(value1, value2)) {
+      return { key, status: 'unchanged', value: value1 };
     }
 
-    if (obj1[key] === obj2[key]) {
-      return { status: 'unchanged', key, value: value1 };
+    if (isObject(value1) && isObject(value2)) {
+      return { key, status: 'nested', children: genDiffTree(value1, value2) };
     }
 
-    return { status: 'modified', key, children: [{ status: 'removed', key, value: value1 }, { status: 'added', key, value: value2 }] };
+    return { key, status: 'modified', value: { value1, value2 } };
   });
 
   return diff;

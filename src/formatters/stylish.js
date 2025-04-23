@@ -1,68 +1,43 @@
 import isObject from '../utilities.js';
 
-const operators = {
-  added: '+',
-  removed: '-',
-  nested: ' ',
-  unchanged: ' ',
-  modified: '-+',
+const baseIndent = ' ';
+const createIndent = (depth) => baseIndent.repeat(depth * 4);
+
+const stringify = (value, depth) => {
+  if (!isObject(value)) return String(value);
+
+  const entries = Object.entries(value);
+  const lines = entries.map(
+    ([key, val]) => `${createIndent(depth + 1)}${key}: ${stringify(val, depth + 1)}`,
+  );
+
+  return `{\n${lines.join('\n')}\n${createIndent(depth)}}`;
 };
 
-const baseIndent = '    ';
-const createIndent = (count) => baseIndent.repeat(count);
+const formatLine = (key, value, indentLevel, sign = ' ') => `${createIndent(indentLevel)}  ${sign} ${key}: ${stringify(value, indentLevel + 1)}`;
 
-const stylishStringify = (tree, depth) => `{\n${tree.map((node) => {
-  const [status, key, value] = node;
+const formatDiff = (node, depth) => {
+  const {
+    status, key, value, children,
+  } = node;
 
-  if (status === 'modified') {
-    const [[removedStatus, previousKey, oldValue], [addedStatus, currentKey, newValue]] = value;
-
-    const formattedOldValue = !Array.isArray(oldValue) ? oldValue : `${stylishStringify(oldValue, depth + 1)}`;
-    const formattedNewValue = !Array.isArray(newValue) ? newValue : `${stylishStringify(newValue, depth + 1)}`;
-
-    return `${createIndent(depth)}  ${operators[removedStatus]} ${previousKey}: ${formattedOldValue}\n${createIndent(depth)}  ${operators[addedStatus]} ${currentKey}: ${formattedNewValue}`;
+  switch (status) {
+    case 'added':
+      return formatLine(key, value, depth, '+');
+    case 'removed':
+      return formatLine(key, value, depth, '-');
+    case 'unchanged':
+      return formatLine(key, value, depth, ' ');
+    case 'modified':
+      return [
+        formatLine(key, value.value1, depth, '-'),
+        formatLine(key, value.value2, depth, '+'),
+      ].join('\n');
+    case 'nested':
+      return `${createIndent(depth)}    ${key}: {\n${children.map((child) => formatDiff(child, depth + 1)).join('\n')}\n${createIndent(depth + 1)}}`;
+    default:
+      throw new Error(`Unknown status: ${status}`);
   }
-
-  if (Array.isArray(value)) {
-    return `${createIndent(depth)}  ${operators[status]} ${key}: ${stylishStringify(value, depth + 1)}`;
-  }
-
-  return `${createIndent(depth)}  ${operators[status]} ${key}: ${value}`;
-}).join('\n')}\n${createIndent(depth)}}`;
-
-const isPrimitive = (data) => {
-  if (Array.isArray(data)) {
-    return false;
-  }
-
-  if (isObject(data)) {
-    return false;
-  }
-
-  return true;
 };
 
-const transformTree = (tree) => {
-  if (isPrimitive(tree)) {
-    return tree;
-  }
-
-  if (isObject(tree)) {
-    const {
-      status, key, value, children,
-    } = tree;
-    if (children) {
-      return [status, key, children.map(transformTree)];
-    }
-    return [status, key, transformTree(value)];
-  }
-
-  return (tree.map(transformTree));
-};
-
-const genStylishFormat = (tree) => {
-  const newTree = transformTree(tree);
-  return stylishStringify(newTree, 0);
-};
-
-export default genStylishFormat;
+export default (diffTree) => `{\n${diffTree.map((node) => formatDiff(node, 0)).join('\n')}\n}`;

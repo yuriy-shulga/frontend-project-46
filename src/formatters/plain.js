@@ -1,41 +1,35 @@
-const getNormalizeValue = (value) => {
-  if (typeof (value) === 'string') {
+import isObject from '../utilities.js';
+
+const formatValue = (value) => {
+  if (typeof value === 'string') {
     return `'${value}'`;
   }
 
-  if (Array.isArray(value)) {
+  if (isObject(value)) {
     return '[complex value]';
   }
 
   return value;
 };
 
-export default (tree) => {
-  const diff = tree.flatMap((node) => {
-    const iter = (el, path) => {
-      const { status, value, children } = el;
-      if (status === 'removed') {
-        return `Property '${path}' was removed`;
-      }
+const formatDiff = (node, path) => {
+  const {
+    status, value, children, key,
+  } = node;
+  const fullPath = path ? `${path}.${key}` : key;
 
-      if (status === 'added') {
-        return `Property '${path}' was added with value: ${getNormalizeValue(value)}`;
-      }
-
-      if (status === 'modified') {
-        const [{ value: rmValue }, { value: addValue }] = children;
-        return `Property '${path}' was updated. From ${getNormalizeValue(rmValue)} to ${getNormalizeValue(addValue)}`;
-      }
-
-      if (status === 'nested') {
-        return value.flatMap((curValue) => iter(curValue, `${path}.${curValue.key}`));
-      }
-
+  switch (status) {
+    case 'removed':
+      return `Property '${fullPath}' was removed`;
+    case 'added':
+      return `Property '${fullPath}' was added with value: ${formatValue(value)}`;
+    case 'modified':
+      return `Property '${fullPath}' was updated. From ${formatValue(value.value1)} to ${formatValue(value.value2)}`;
+    case 'nested':
+      return children.flatMap((child) => formatDiff(child, fullPath));
+    default:
       return [];
-    };
-
-    return iter(node, node.key);
-  });
-
-  return diff.join('\n', '');
+  }
 };
+
+export default (diffTree) => diffTree.flatMap((node) => formatDiff(node, '')).join('\n');
