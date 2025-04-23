@@ -1,11 +1,11 @@
-import isObject from '../utilities.js';
+import _ from 'lodash';
 
 const formatValue = (value) => {
   if (typeof value === 'string') {
     return `'${value}'`;
   }
 
-  if (isObject(value)) {
+  if (_.isPlainObject(value)) {
     return '[complex value]';
   }
 

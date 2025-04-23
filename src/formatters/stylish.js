@@ -1,10 +1,10 @@
-import isObject from '../utilities.js';
+import _ from 'lodash';
 
 const baseIndent = ' ';
 const createIndent = (depth) => baseIndent.repeat(depth * 4);
 
 const stringify = (value, depth) => {
-  if (!isObject(value)) return String(value);
+  if (!_.isPlainObject(value)) return String(value);
 
   const entries = Object.entries(value);
   const lines = entries.map(

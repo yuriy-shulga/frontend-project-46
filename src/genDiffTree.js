@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import isObject from './utilities.js';
 
 const genDiffTree = (data1, data2) => {
   const keys = _.sortBy(Object.keys({ ...data1, ...data2 }));
@@ -18,7 +17,7 @@ const genDiffTree = (data1, data2) => {
       return { key, status: 'unchanged', value: value1 };
     }
 
-    if (isObject(value1) && isObject(value2)) {
+    if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
       return { key, status: 'nested', children: genDiffTree(value1, value2) };
     }
 
