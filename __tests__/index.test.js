@@ -1,20 +1,20 @@
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import path, { dirname } from 'path';
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+import path, { dirname } from 'path'
 import {
   describe, test, expect,
-} from '@jest/globals';
-import gendiff from '../src/index.js';
+} from '@jest/globals'
+import gendiff from '../src/index.js'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const getFixturePath = filename => path.join(__dirname, '..', '__fixtures__', filename)
 
 describe('main functionality', () => {
-  const stylishDiff = fs.readFileSync(getFixturePath('stylish.txt'), 'utf8');
-  const plainDiff = fs.readFileSync(getFixturePath('plain.txt'), 'utf8');
-  const jsonDiff = fs.readFileSync(getFixturePath('json.txt'), 'utf8');
+  const stylishDiff = fs.readFileSync(getFixturePath('stylish.txt'), 'utf8')
+  const plainDiff = fs.readFileSync(getFixturePath('plain.txt'), 'utf8')
+  const jsonDiff = fs.readFileSync(getFixturePath('json.txt'), 'utf8')
 
   test.each([
     {
@@ -47,26 +47,26 @@ describe('main functionality', () => {
   ])('$format format: $filepath1 $filepath2', ({
     filepath1, filepath2, format, expected,
   }) => {
-    const file1 = getFixturePath(filepath1);
-    const file2 = getFixturePath(filepath2);
-    expect(gendiff(file1, file2, format)).toBe(expected);
-  });
-});
+    const file1 = getFixturePath(filepath1)
+    const file2 = getFixturePath(filepath2)
+    expect(gendiff(file1, file2, format)).toBe(expected)
+  })
+})
 
 describe('borderline cases', () => {
-  const json1 = getFixturePath('file1.json');
-  const json2 = getFixturePath('file2.json');
-  const stylishDiff = fs.readFileSync(getFixturePath('stylish.txt'), 'utf8');
+  const json1 = getFixturePath('file1.json')
+  const json2 = getFixturePath('file2.json')
+  const stylishDiff = fs.readFileSync(getFixturePath('stylish.txt'), 'utf8')
 
   test('default format', () => {
-    expect(gendiff(json1, json2)).toBe(stylishDiff);
-  });
+    expect(gendiff(json1, json2)).toBe(stylishDiff)
+  })
 
   test('wrong extension', () => {
-    expect(() => gendiff(stylishDiff, json2, 'stylish')).toThrow();
-  });
+    expect(() => gendiff(stylishDiff, json2, 'stylish')).toThrow()
+  })
 
   test('wrong format', () => {
-    expect(() => gendiff(json1, json2, 'style')).toThrow();
-  });
-});
+    expect(() => gendiff(json1, json2, 'style')).toThrow()
+  })
+})
