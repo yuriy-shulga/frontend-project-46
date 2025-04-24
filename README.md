@@ -4,8 +4,9 @@ Compares two configuration files and shows a difference
 
 [![Actions Status](https://github.com/yuriy-shulga/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/yuriy-shulga/frontend-project-46/actions)
 [![Actions Status](https://github.com/yuriy-shulga/frontend-project-46/actions/workflows/tests.yml/badge.svg)](https://github.com/yuriy-shulga/frontend-project-46/actions)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b8d8637f857e413cc216/maintainability)](https://codeclimate.com/github/yuriy-shulga/frontend-project-46/maintainability)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=yuriy-shulga_frontend-project-46&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=yuriy-shulga_frontend-project-46)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b8d8637f857e413cc216/test_coverage)](https://codeclimate.com/github/yuriy-shulga/frontend-project-46/test_coverage)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=yuriy-shulga_frontend-project-46&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=yuriy-shulga_frontend-project-46)
 
 ## Installation
 
